@@ -1,12 +1,10 @@
-#include "../Menu/Headers/Menu.h"
-#include "../Headers/Net.h"
+#include "../Headers/WebNode.h"
 
 int main()
 {
-	//Ipv4 class test
-	//Ipv4 i(192, 168, 100, 1, 24);
-	//cout << i.toString();
+	WebNode node;
 
+	node.displayNetworks();
 
 	return 0;
 }
