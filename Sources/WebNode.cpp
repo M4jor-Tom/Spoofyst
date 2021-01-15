@@ -25,7 +25,7 @@ void WebNode::displayNetworks()
 	do
 	{
 		unsigned int
-			chosenNetwork = networkMenu.display(),
+			chosenNetwork = networkMenu.display("Choose a network:"),
 			increment = 0;
 
 		for (Net &network : _networks)

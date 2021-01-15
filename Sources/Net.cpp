@@ -26,37 +26,43 @@ string Net::toString() const
 
 size_t Net::getIpCount() const
 {
-	return _ips.size();
+	return _ipsPtrs.size();
 }
 
 void Net::displayIpv4s()
 {
 	Menu ipv4sMenu;
-	list<Ipv4> routers;
+	list<Ipv4 *> routers;
 
-	for (const Ipv4& ip : _ips)
-		if (ip.getIdentity() == Ipv4::OTHER)
-			ipv4sMenu.addChoice(ip.toString());
-		else if(ip.getIdentity() == Ipv4::ROUTER)
-			routers.push_back(ip);
+	for (Ipv4 *ipPtr : _ipsPtrs)
+		if (ipPtr -> getIdentity() == Ipv4::OTHER)
+			ipv4sMenu.addChoice(ipPtr -> toString());
+		else if(ipPtr -> getIdentity() == Ipv4::ROUTER)
+			routers.push_back(ipPtr);
 	
 	ipv4sMenu.addExit();
 
 	do
 	{
 		unsigned int
-			chosenIpv4 = ipv4sMenu.display(),
+			chosenIpv4 = ipv4sMenu.display("Choose the Ipv4 of a machine you wish to interact with:"),
 			increment = 0;
 
-		for (Ipv4& ip : _ips)
+		for (Ipv4 *ipPtr : _ipsPtrs)
 			if (increment++ == chosenIpv4)
-				attackMenu(routers, ip);
+				attackMenu(routers, ipPtr);
 	} while (!ipv4sMenu.leaving());
 }
 
-void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
+void Net::attackMenu(list<Ipv4 *> routers, const Ipv4 *ip)
 {
 	Menu optionsMenu;
+
+	if (ip -> getIdentity() == Ipv4::IGNORED)
+	{
+		cout << "Error: you won't attack yourself" << endl;
+		return;
+	}
 
 	optionsMenu.addChoice("Spoof");
 	optionsMenu.addChoice("Shutdown");
@@ -64,11 +70,11 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 
 	do
 	{
-		switch (optionsMenu.display())
+		switch (optionsMenu.display("Choose the interaction you want to have with it:"))
 		{
 		case 0:
 			//Spoof
-			for(const Ipv4 &router: routers)
+			for(const Ipv4 *router: routers)
 				spoof(router, ip);
 			break;
 
