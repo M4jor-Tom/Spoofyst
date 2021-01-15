@@ -15,6 +15,9 @@ public:
 	//Constructors
 	Ipv4(const usi &word1, const usi& word2, const usi& word3, const usi& word4, const usi& who);
 
+	//Destructors
+	~Ipv4();
+
 	//Getters
 	string toString() const;
 	stringstream toSstream() const;
@@ -22,7 +25,7 @@ public:
 
 	//Constants
 	static const usi
-		USER = 1,
+		IGNORED = 1,
 		ROUTER = 2,
 		OTHER = 3;
 };

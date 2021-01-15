@@ -8,9 +8,12 @@ WebNode::WebNode()
 void WebNode::setNetworks()
 {
 	//TESTING
-	_networks.push_back(Net("eno1", Net::ETHER, 24));
-	_networks.push_back(Net("usb0", Net::ETHER, 24));
-	_networks.push_back(Net("lo", Net::ETHER, 24));
+	_networks.push_back(Net("eno1", Net::ETHER, 24, new Ipv4(192, 168, 1, 2, Ipv4::IGNORED)));
+	_networks.push_back(Net("usb0", Net::ETHER, 24, new Ipv4(192, 168, 1, 2, Ipv4::IGNORED)));
+	_networks.push_back(Net("lo", Net::ETHER, 24, new Ipv4(192, 168, 1, 2, Ipv4::IGNORED)));
+
+	//Linux command
+
 }
 
 void WebNode::displayNetworks()

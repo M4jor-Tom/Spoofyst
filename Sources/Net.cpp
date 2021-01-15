@@ -1,22 +1,29 @@
 #include "../Headers/Net.h"
 
-Net::Net(const string& name, const usi& connectionType, const usi &mask):
+Net::Net(const string& name, const usi& connectionType, const usi &mask, Ipv4 *userIpPtr):
 	_name(name),
 	_connectionType(connectionType),
-	_mask(mask)
+	_mask(mask),
+	_userIpPtr(userIpPtr)
 {
 	nmap();
 }
 
 void Net::nmap()
 {
+	//Deleting existing Ips for reload
+	for (Ipv4* ipP : _ipsPtrs)
+		delete ipP;
+	_ipsPtrs.clear();
+
 	//TESTING
-	_ips.clear();
-	_ips.push_back(Ipv4(192, 168, 0, 0, Ipv4::ROUTER));
-	_ips.push_back(Ipv4(192, 168, 0, 1, Ipv4::OTHER));
-	_ips.push_back(Ipv4(192, 168, 0, 2, Ipv4::USER));
-	_ips.push_back(Ipv4(192, 168, 0, 3, Ipv4::OTHER));
-	_ips.push_back(Ipv4(192, 168, 0, 4, Ipv4::OTHER));
+	_ipsPtrs.push_back(new Ipv4(192, 168, 0, 0, Ipv4::ROUTER));
+	_ipsPtrs.push_back(new Ipv4(192, 168, 0, 1, Ipv4::OTHER));
+	_ipsPtrs.push_back(new Ipv4(192, 168, 0, 3, Ipv4::OTHER));
+	_ipsPtrs.push_back(new Ipv4(192, 168, 0, 4, Ipv4::OTHER));
+
+	//Linux command
+
 }
 
 string Net::toString() const
@@ -86,16 +93,14 @@ void Net::attackMenu(list<Ipv4 *> routers, const Ipv4 *ip)
 	} while (!optionsMenu.leaving());
 }
 
-void Net::spoof(const Ipv4& router, const Ipv4& target) const
+void Net::spoof(const Ipv4 *router, const Ipv4 *target) const
 {
 	//Linux command
 
 }
 
-void Net::shutdown(const Ipv4& target) const
+void Net::shutdown(const Ipv4 *target) const
 {
 	//Linux command
-
-	//Windows command
 
 }

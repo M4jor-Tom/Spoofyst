@@ -13,6 +13,11 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 	_words[3] = word4;
 }
 
+Ipv4::~Ipv4()
+{
+
+}
+
 string Ipv4::toString() const
 {
 	return toSstream().str();
@@ -32,7 +37,7 @@ stringstream Ipv4::toSstream() const
 	/*if (_who == Ipv4::ROUTER)
 		_toSstream << "[ROUTER]";
 	else if (_who == Ipv4::USER)
-		_toSstream << "[YOU]";
+		_toSstream << "[IGNORED]";
 	else
 		_toSstream << "[SOMEONE]";*/
 
