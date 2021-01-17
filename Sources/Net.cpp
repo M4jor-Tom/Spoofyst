@@ -1,8 +1,10 @@
 #include "../Headers/Net.h"
 
-Net::Net(const string& name, const usi& connectionType, const usi &mask):
+Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, const Ipv4 &gateIp, const usi &mask):
 	_name(name),
 	_connectionType(connectionType),
+	_userIp(userIp),
+	_gateIp(gateIp),
 	_mask(mask)
 {
 	nmap();
@@ -12,9 +14,9 @@ void Net::nmap()
 {
 	//TESTING
 	_ips.clear();
-	_ips.push_back(Ipv4(192, 168, 0, 0, Ipv4::ROUTER));
+	//_ips.push_back(Ipv4(192, 168, 0, 0, Ipv4::ROUTER));
 	_ips.push_back(Ipv4(192, 168, 0, 1, Ipv4::OTHER));
-	_ips.push_back(Ipv4(192, 168, 0, 2, Ipv4::USER));
+	//_ips.push_back(Ipv4(192, 168, 0, 2, Ipv4::USER));
 	_ips.push_back(Ipv4(192, 168, 0, 3, Ipv4::OTHER));
 	_ips.push_back(Ipv4(192, 168, 0, 4, Ipv4::OTHER));
 }
@@ -26,19 +28,19 @@ string Net::toString() const
 
 size_t Net::getIpCount() const
 {
-	return _ipsPtrs.size();
+	return _ips.size();
 }
 
 void Net::displayIpv4s()
 {
 	Menu ipv4sMenu;
-	list<Ipv4 *> routers;
+	list<Ipv4> routers;
 
-	for (Ipv4 *ipPtr : _ipsPtrs)
-		if (ipPtr -> getIdentity() == Ipv4::OTHER)
-			ipv4sMenu.addChoice(ipPtr -> toString());
-		else if(ipPtr -> getIdentity() == Ipv4::ROUTER)
-			routers.push_back(ipPtr);
+	for (const Ipv4 &ip : _ips)
+		if (ip.getIdentity() == Ipv4::OTHER)
+			ipv4sMenu.addChoice(ip.toString());
+		else if(ip.getIdentity() == Ipv4::ROUTER)
+			routers.push_back(ip);
 	
 	ipv4sMenu.addExit();
 
@@ -48,17 +50,17 @@ void Net::displayIpv4s()
 			chosenIpv4 = ipv4sMenu.display("Choose the Ipv4 of a machine you wish to interact with:"),
 			increment = 0;
 
-		for (Ipv4 *ipPtr : _ipsPtrs)
+		for (const Ipv4 &ip : _ips)
 			if (increment++ == chosenIpv4)
-				attackMenu(routers, ipPtr);
+				attackMenu(routers, ip);
 	} while (!ipv4sMenu.leaving());
 }
 
-void Net::attackMenu(list<Ipv4 *> routers, const Ipv4 *ip)
+void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 {
 	Menu optionsMenu;
 
-	if (ip -> getIdentity() == Ipv4::IGNORED)
+	if (ip.getIdentity() == Ipv4::USER)
 	{
 		cout << "Error: you won't attack yourself" << endl;
 		return;
@@ -74,7 +76,7 @@ void Net::attackMenu(list<Ipv4 *> routers, const Ipv4 *ip)
 		{
 		case 0:
 			//Spoof
-			for(const Ipv4 *router: routers)
+			for(const Ipv4 &router: routers)
 				spoof(router, ip);
 			break;
 

@@ -5,11 +5,12 @@ class Net
 {
 private:
 	list<Ipv4> _ips;
+	Ipv4 _userIp, _gateIp;
 	const usi _connectionType, _mask;
 	const string _name;
 public:
 	//Constructors
-	Net(const string &name, const usi &connectionType, const usi &mask);
+	Net(const string &name, const usi &connectionType, const Ipv4& userIp, const Ipv4& gateIp, const usi &mask);
 
 	//Setters
 	void nmap();
