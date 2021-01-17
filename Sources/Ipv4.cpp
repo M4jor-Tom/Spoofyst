@@ -13,6 +13,15 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 	_words[3] = word4;
 }
 
+Ipv4::Ipv4(const Ipv4 &toCopy):
+	_who(toCopy._who)
+{
+	_words[0] = toCopy._words[0];
+	_words[1] = toCopy._words[1];
+	_words[2] = toCopy._words[2];
+	_words[3] = toCopy._words[3];
+}
+
 string Ipv4::toString() const
 {
 	return toSstream().str();
@@ -39,7 +48,8 @@ stringstream Ipv4::toSstream() const
 	return _toSstream;
 }
 
+/*
 usi Ipv4::getIdentity() const
 {
 	return _who;
-}
+}*/
