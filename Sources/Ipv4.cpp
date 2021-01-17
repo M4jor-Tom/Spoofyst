@@ -4,8 +4,7 @@
 
 using namespace std;
 
-Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word4, const usi &who):
-	_who(who)
+Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word4)// , const usi& who): _who(who)
 {
 	_words[0] = word1;
 	_words[1] = word2;
@@ -13,8 +12,7 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 	_words[3] = word4;
 }
 
-Ipv4::Ipv4(const Ipv4 &toCopy):
-	_who(toCopy._who)
+Ipv4::Ipv4(const Ipv4 &toCopy)//: _who(toCopy._who)
 {
 	_words[0] = toCopy._words[0];
 	_words[1] = toCopy._words[1];

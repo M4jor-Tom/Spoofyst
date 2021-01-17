@@ -18,10 +18,10 @@ void Net::nmap()
 	//TESTING
 	_ips.clear();
 	//_ips.push_back(Ipv4(192, 168, 0, 0, Ipv4::ROUTER));
-	_ips.push_back(Ipv4(192, 168, 0, 1, Ipv4::OTHER));
+	_ips.push_back(Ipv4(192, 168, 0, 1));// , Ipv4::OTHER));
 	//_ips.push_back(Ipv4(192, 168, 0, 2, Ipv4::USER));
-	_ips.push_back(Ipv4(192, 168, 0, 3, Ipv4::OTHER));
-	_ips.push_back(Ipv4(192, 168, 0, 4, Ipv4::OTHER));
+	_ips.push_back(Ipv4(192, 168, 0, 3));// , Ipv4::OTHER));
+	_ips.push_back(Ipv4(192, 168, 0, 4));// , Ipv4::OTHER));
 }
 
 string Net::toString() const

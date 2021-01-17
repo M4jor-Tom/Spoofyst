@@ -11,9 +11,9 @@ void WebNode::setNetworks()
 
 
 	//TESTING
-	_networks.push_back(Net("eno1", Net::ETHER, Ipv4(192, 168, 1, 2, Ipv4::USER), Ipv4(192, 168, 0, 0, Ipv4::ROUTER), 24));
-	_networks.push_back(Net("usb0", Net::ETHER, Ipv4(192, 168, 1, 2, Ipv4::USER), Ipv4(192, 168, 0, 0, Ipv4::ROUTER), 24));
-	_networks.push_back(Net("lo", Net::ETHER, Ipv4(192, 168, 1, 2, Ipv4::USER), Ipv4(192, 168, 0, 0, Ipv4::ROUTER), 24));
+	_networks.push_back(Net("eno1", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
+	_networks.push_back(Net("usb0", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
+	_networks.push_back(Net("lo", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
 }
 
 void WebNode::displayNetworks()
