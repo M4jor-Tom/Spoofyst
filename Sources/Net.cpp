@@ -44,7 +44,7 @@ void Net::displayIpv4s()
 	
 	ipv4sMenu.addExit();
 
-	do
+	while (!ipv4sMenu.leaving())
 	{
 		unsigned int
 			chosenIpv4 = ipv4sMenu.display("Choose the Ipv4 of a machine you wish to interact with:"),
@@ -53,7 +53,7 @@ void Net::displayIpv4s()
 		for (const Ipv4 &ip : _ips)
 			if (increment++ == chosenIpv4)
 				attackMenu(routers, ip);
-	} while (!ipv4sMenu.leaving());
+	}
 }
 
 void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
@@ -70,7 +70,7 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 	optionsMenu.addChoice("Shutdown");
 	optionsMenu.addExit();
 
-	do
+	while (!optionsMenu.leaving())
 	{
 		switch (optionsMenu.display("Choose the interaction you want to have with it:"))
 		{
@@ -85,7 +85,7 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 			shutdown(ip);
 			break;
 		}
-	} while (!optionsMenu.leaving());
+	}
 }
 
 void Net::spoof(const Ipv4& router, const Ipv4& target) const

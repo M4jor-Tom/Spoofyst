@@ -25,7 +25,7 @@ void WebNode::displayNetworks()
 
 	networkMenu.addExit();
 
-	do
+	while (!networkMenu.leaving())
 	{
 		unsigned int
 			chosenNetwork = networkMenu.display("Choose a network:"),
@@ -37,5 +37,5 @@ void WebNode::displayNetworks()
 				network.nmap();
 				network.displayIpv4s();
 			}
-	} while (!networkMenu.leaving());
+	}
 }
