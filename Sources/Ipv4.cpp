@@ -12,7 +12,7 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 	_words[3] = word4;
 }
 
-Ipv4::Ipv4(const Ipv4 &toCopy)//: _who(toCopy._who)
+Ipv4::Ipv4(const Ipv4 &toCopy)
 {
 	_words[0] = toCopy._words[0];
 	_words[1] = toCopy._words[1];
@@ -36,18 +36,5 @@ stringstream Ipv4::toSstream() const
 			_toSstream << ".";
 	}
 
-	/*if (_who == Ipv4::ROUTER)
-		_toSstream << "[ROUTER]";
-	else if (_who == Ipv4::USER)
-		_toSstream << "[YOU]";
-	else
-		_toSstream << "[SOMEONE]";*/
-
 	return _toSstream;
 }
-
-/*
-usi Ipv4::getIdentity() const
-{
-	return _who;
-}*/

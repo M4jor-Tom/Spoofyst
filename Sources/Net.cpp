@@ -12,14 +12,17 @@ Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, cons
 
 void Net::nmap()
 {
-	//Linux command
+	//Clearing ips before scanning again
+	_ips.clear();
+
+	//Linux command [nmap]
+	//Getting Ips of the whole network,
+	//*It is required to ommit ips of the user and the router
+	//*figuring in the class' attributes
 
 
 	//TESTING
-	_ips.clear();
-	//_ips.push_back(Ipv4(192, 168, 0, 0, Ipv4::ROUTER));
 	_ips.push_back(Ipv4(192, 168, 0, 1));// , Ipv4::OTHER));
-	//_ips.push_back(Ipv4(192, 168, 0, 2, Ipv4::USER));
 	_ips.push_back(Ipv4(192, 168, 0, 3));// , Ipv4::OTHER));
 	_ips.push_back(Ipv4(192, 168, 0, 4));// , Ipv4::OTHER));
 }
@@ -41,10 +44,7 @@ void Net::displayIpv4s()
 
 
 	for (const Ipv4 &ip : _ips)
-		//if (ip.getIdentity() == Ipv4::OTHER)
-			ipv4sMenu.addChoice(ip.toString());
-		/*else if(ip.getIdentity() == Ipv4::ROUTER)
-			routers.push_back(ip);*/
+		ipv4sMenu.addChoice(ip.toString());
 	
 	ipv4sMenu.addExit();
 
@@ -63,12 +63,6 @@ void Net::displayIpv4s()
 void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 {
 	Menu optionsMenu;
-
-	/*if (ip.getIdentity() == Ipv4::USER)
-	{
-		cout << "Error: you won't attack yourself" << endl;
-		return;
-	}*/
 
 	optionsMenu.addChoice("Spoof");
 	optionsMenu.addChoice("Shutdown");
@@ -94,12 +88,12 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 
 void Net::spoof(const Ipv4& router, const Ipv4& target) const
 {
-	//Linux command
+	//Linux command [arpspoof]
 
 }
 
 void Net::shutdown(const Ipv4& target) const
 {
-	//Linux command
+	//Linux command [shutdown]
 
 }

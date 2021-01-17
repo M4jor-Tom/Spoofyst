@@ -7,7 +7,7 @@ WebNode::WebNode()
 
 void WebNode::setNetworks()
 {
-	//Linux command
+	//Linux command [ifconfig]
 
 
 	//TESTING
