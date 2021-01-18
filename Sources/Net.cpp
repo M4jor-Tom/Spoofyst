@@ -15,6 +15,12 @@ void Net::nmap()
 	//Clearing ips before scanning again
 	_ips.clear();
 
+	//Scanning
+	stringstream nmapCommand;
+	nmapCommand << "nmap -sP " << _userIp.toString();
+
+	string stringyMap = _system(nmapCommand.str().c_str());
+
 	//Linux command [nmap]
 	//Getting Ips of the whole network,
 	//*It is required to ommit ips of the user and the router

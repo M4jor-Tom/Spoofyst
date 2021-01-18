@@ -8,6 +8,16 @@ WebNode::WebNode()
 void WebNode::setNetworks()
 {
 	//Linux command [ifconfig]
+	string stringyNetworks = _system("ifconfig -a");// | grep -e '^.*: '
+
+	//Converting string return to:
+	//-A list of networks and for each:
+	//--User Ip
+	//--Router Ip
+	//*Regexes*
+
+	//Storing them into a network array
+	//*_networks.push_back(Net(...));*
 
 
 	//TESTING

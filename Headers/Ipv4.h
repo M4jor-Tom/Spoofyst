@@ -9,7 +9,6 @@ class Ipv4
 {
 private:
 	usi _words[4];
-	//const usi _who;
 
 public:
 	//Constructors
@@ -19,11 +18,4 @@ public:
 	//Getters
 	string toString() const;
 	stringstream toSstream() const;
-	//usi getIdentity() const;
-
-	//Constants
-	/*static const usi
-		USER = 1,
-		ROUTER = 2,
-		OTHER = 3;*/
 };
