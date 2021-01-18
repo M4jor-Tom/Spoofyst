@@ -1,5 +1,6 @@
 #pragma once
 #include "Ipv4.h"
+#include "../process/Headers/process.h"
 
 class Net
 {

@@ -1,3 +1,6 @@
 [submodule "Menu"]
 	path = Menu
 	url = https://github.com/M4jor-Tom/Menu
+[submodule "process"]
+	path = process
+	url = https://github.com/M4jor-Tom/process
