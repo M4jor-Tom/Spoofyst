@@ -1,5 +1,7 @@
 #include "../Headers/WebNode.h"
 
+#include <regex>
+
 const usi
 	Net::INET,// = 1,
 	Net::ETHER;// = 2;
@@ -19,6 +21,9 @@ void WebNode::setNetworks()
 	//--User Ip
 	//--Router Ip
 	//*Regexes*
+	regex netNamesRegex("^.+: ");
+	string netNames;
+	//regex_search(stringyNetworks, netNamesRegex);
 
 	//Storing them into a network array
 	//*_networks.push_back(Net(...));*
