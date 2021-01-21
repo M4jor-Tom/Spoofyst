@@ -1,5 +1,9 @@
 #include "../Headers/WebNode.h"
 
+const usi
+	Net::INET,// = 1,
+	Net::ETHER;// = 2;
+
 WebNode::WebNode()
 {
 	setNetworks();

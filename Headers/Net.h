@@ -29,7 +29,7 @@ public:
 	void shutdown(const Ipv4& target) const;
 
 	//Constants
-	inline static const usi
+	static const usi
 		INET = 1,
 		ETHER = 2;
 };
