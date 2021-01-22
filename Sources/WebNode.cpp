@@ -1,4 +1,5 @@
 #include "../Headers/WebNode.h"
+#include "../Menu/unicommand/Headers/unicommand.h"
 
 #include <regex>
 #include <sstream>
@@ -17,6 +18,7 @@ void WebNode::setNetworks()
 	//Linux command [ifconfig]
 	cout << "Scanning available networks..." << endl;
 	string stringyNetworks = _system("ifconfig -a");// | grep -e '^.*: '
+	system(clearCommand.c_str());
 
 	//Converting string return to:
 	//-A list of networks and for each:
