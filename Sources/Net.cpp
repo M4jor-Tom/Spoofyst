@@ -2,10 +2,10 @@
 
 Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, const Ipv4 &gateIp, const usi &mask):
 	_name(name),
-	_connectionType(connectionType),
 	_userIp(Ipv4(userIp)),
 	_gateIp(Ipv4(gateIp)),
-	_mask(mask)
+	_mask(mask),
+	_connectionType(connectionType)
 {
 	nmap();
 }
