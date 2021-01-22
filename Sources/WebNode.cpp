@@ -1,9 +1,6 @@
 #include "../Headers/WebNode.h"
 #include "../Menu/unicommand/Headers/unicommand.h"
 
-#include <regex>
-#include <sstream>
-
 const usi
 	Net::INET,// = 1,
 	Net::ETHER;// = 2;
@@ -24,40 +21,7 @@ void WebNode::setNetworks()
 	//-A list of networks and for each:
 	//--User Ip
 	//--Router Ip
-	//*Regexes*
-	regex netNamesRegex("^(.+): ");
-	smatch netNamesMatches;
-	string delimiter = " ";
 
-	/*stringstream results;
-	regex wsaq_re("\\s+");
-	copy(
-		sregex_token_iterator(stringyNetworks.begin(), stringyNetworks.end(), wsaq_re, -1),
-		sregex_token_iterator(),
-		ostream_iterator<string>(results, delimiter)
-	);
-
-	string token = results.str().substr(0, results.str().find(delimiter));*/
-	size_t pos = 0;
-	string token;
-	while ((pos = stringyNetworks.find(delimiter)) != string::npos)
-	{
-		token = stringyNetworks.substr(0, pos);
-		if(regex_search(stringyNetworks, netNamesMatches, netNamesRegex))
-			;//cout << token << endl;
-		stringyNetworks.erase(0, pos + delimiter.length());
-	}
-	//auto stringyNetworksBegin = 
-	//if(regex_search(stringyNetworks, netNamesMatches, netNamesRegex))
-		/*for(
-			auto it = cregex_iterator(stringyNetworks, stringyNetworks + stringyNetworks.size(), netNamesRegex);
-            it != cregex_iterator();
-           	++it
-		)*/
-		//cout << *it.str() << endl;
-		//cout << netNamesMatches.str() << endl;
-	//else
-		//throw "Invalid result from from ifconfig";
 
 	//Storing them into a network array
 	//*_networks.push_back(Net(...));*
