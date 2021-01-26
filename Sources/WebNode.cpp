@@ -14,6 +14,8 @@ void WebNode::setNetworks()
 {
 	//Linux command [ifconfig]
 	cout << "Scanning available networks..." << endl;
+
+	//May use netstat instead of ifconfig
 	string stringyNetworks = _system("ifconfig -a");// | grep -e '^.*: '
 	system(clearCommand.c_str());
 
@@ -21,10 +23,81 @@ void WebNode::setNetworks()
 	//-A list of networks and for each:
 	//--User Ip
 	//--Router Ip
+	size_t startCursor = 0, endCursor = 0, infoEndCursor = 0;
+	while(infoEndCursor != string::npos)
+	{
+		//First we check where are the last informations to look for, to avoid messingly looking further
+		//"collisions" is a word appearing at the end of each network display
+		infoEndCursor = stringyNetworks.find("collisions ", startCursor + 1);
+		/*if(infoEndCursor == string::npos)
+		{
+			cout << "End of info not found. Crashing program." << endl;
+			throw "End of info not found";
+		}*/
 
+		//Then we look for the length of the network name
+		//Getting name
+		endCursor = stringyNetworks.find(":", startCursor);
+		string netName = stringyNetworks.substr(startCursor, endCursor - startCursor);
+		startCursor = endCursor;
 
-	//Storing them into a network array
-	//*_networks.push_back(Net(...));*
+		string inetString = "inet ", maskString = "netmask ";
+		if((startCursor = stringyNetworks.find(inetString, startCursor)) < infoEndCursor)
+		{
+			//If there's an inet, there's an Ipv4 to hack (maybe)
+			//Getting Ipv4
+			endCursor = stringyNetworks.find(maskString, startCursor);
+			string stringyIpv4 = stringyNetworks.substr(
+				startCursor + inetString.size(),
+				endCursor - startCursor - inetString.size()
+			);
+			startCursor = endCursor;
+
+			//Getting netmask
+			endCursor = stringyNetworks.find(" ", startCursor);
+			string stringyMask = stringyNetworks.substr(
+				startCursor + maskString.size(),
+				endCursor - startCursor + maskString.size()
+			);
+			startCursor = endCursor;
+
+			//Printing info
+			cout
+				<< "netName: " << netName << endl
+				<< "netMask: " << stringyMask << endl
+				<< "userIpv4: " << stringyIpv4 << endl;
+			
+			//Storing them into a network list
+			//*_networks.push_back(Net(netName, Net::INET, ));*
+		}
+		else if(infoEndCursor != string::npos)
+		{
+			//Ending loop
+			endCursor = infoEndCursor;
+
+			//Skipping "collisions" word
+			while(isalpha(stringyNetworks[endCursor]))
+				endCursor++;
+			
+			//Skipping whitespace between "collisions" and collisions count
+			endCursor++;
+
+			//Skipping collisions count
+			while(isdigit(stringyNetworks[endCursor]))
+				endCursor++;
+			
+			//Skipping carriage returns
+			endCursor += 2;
+
+			startCursor = endCursor;
+		}
+
+		/*cout
+			<< "loop end: " << endl
+			<< "startCursor: " << startCursor << endl
+			<< "endCursor: " << endCursor << endl
+			<< "infoEndCursor: " << infoEndCursor << endl;*/
+	}
 
 
 	//TESTING
