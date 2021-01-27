@@ -12,6 +12,7 @@ private:
 
 public:
 	//Constructors
+	Ipv4(const string &stringyIp);
 	Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word4);// , const usi& who);
 	Ipv4(const Ipv4 &toCopy);
 

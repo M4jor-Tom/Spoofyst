@@ -1,8 +1,15 @@
 #include "../Headers/Ipv4.h"
+#include "../Stringyst/Headers/Stringyst.h"
 #include <sstream>
-#include <string>
 
 using namespace std;
+
+Ipv4::Ipv4(const string &stringyIp)
+{
+	usi i = 0;
+	for(string stringyWord : explode(".", trim(stringyIp, " \n\r")))
+		_words[i++] = atoi(stringyWord.c_str());
+}
 
 Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word4)// , const usi& who): _who(who)
 {
