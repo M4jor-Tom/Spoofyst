@@ -1,6 +1,6 @@
-OBJS	= main.o Ipv4.o WebNode.o Net.o process.o Menu.o MenuChoice.o conio.o
-SOURCE	= Sources/main.cpp Sources/Ipv4.cpp Sources/Net.cpp Sources/WebNode.cpp process/Sources/process.cpp Menu/Sources/Menu.cpp Menu/Sources/MenuChoice.cpp Menu/conio/Sources/conio.cpp
-HEADER	= Headers/Ipv4.h Headers/Net.h Headers/WebNode.h process/Headers/process.h Menu/Headers/Menu.h Menu/Headers/MenuChoice.h Menu/conio/Headers/conio.h Menu/unicommand/Headers/unicommand.h
+OBJS	= main.o Ipv4.o WebNode.o Net.o process.o Stringyst.o Menu.o MenuChoice.o conio.o
+SOURCE	= Sources/main.cpp Sources/Ipv4.cpp Sources/Net.cpp Sources/WebNode.cpp process/Sources/process.cpp Stringyst/Sources/Stringyst.cpp Menu/Sources/Menu.cpp Menu/Sources/MenuChoice.cpp Menu/conio/Sources/conio.cpp
+HEADER	= Headers/Ipv4.h Headers/Net.h Headers/WebNode.h process/Headers/process.h Stringyst/Headers/Stringyst.h Menu/Headers/Menu.h Menu/Headers/MenuChoice.h Menu/conio/Headers/conio.h Menu/unicommand/Headers/unicommand.h
 OUT	= Bin/Spoofyst
 CC	 = g++
 FLAGS	 = -g -c -Wall
@@ -23,6 +23,9 @@ Net.o: Sources/Net.cpp
 
 process.o: process/Sources/process.cpp
 	$(CC) $(FLAGS) process/Sources/process.cpp 
+
+Stringyst.o: Stringyst/Sources/Stringyst.cpp
+	$(CC) $(FLAGS) Stringyst/Sources/Stringyst.cpp
 
 Menu.o: Menu/Sources/Menu.cpp
 	$(CC) $(FLAGS) Menu/Sources/Menu.cpp 

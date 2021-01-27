@@ -4,3 +4,6 @@
 [submodule "process"]
 	path = process
 	url = https://github.com/M4jor-Tom/process
+[submodule "Stringyst"]
+	path = Stringyst
+	url = https://github.com/M4jor-Tom/Stringyst
