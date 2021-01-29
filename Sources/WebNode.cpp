@@ -1,5 +1,6 @@
 #include "../Headers/WebNode.h"
 #include "../Menu/unicommand/Headers/unicommand.h"
+#include "../Stringyst/Headers/Stringyst.h"
 
 const usi
 	Net::INET,// = 1,
@@ -16,8 +17,20 @@ void WebNode::setNetworks()
 	cout << "Scanning available networks..." << endl;
 
 	//May use netstat instead of ifconfig
-	string stringyNetworks = _system("ifconfig -a");// | grep -e '^.*: '
+	string
+		stringyNetworks = _system("ifconfig -a"),
+		stringyGate = _system("ip route | grep default");
+	vector<string> vectyGate = vExplode(" ", stringyGate);
+	string
+		stringyGateIpv4 = vectyGate[2],
+		mainNetName = vectyGate[4];
+
 	system(clearCommand.c_str());
+
+	cout << "main: " << mainNetName << endl;
+	cout << "stringyGate: " << stringyGate << endl;
+	for(size_t i = 0; i < vectyGate.size(); i++)
+		cout << " / " << vectyGate[i] << endl;
 
 	//Converting string return to:
 	//-A list of networks and for each:
@@ -29,11 +42,6 @@ void WebNode::setNetworks()
 		//First we check where are the last informations to look for, to avoid messingly looking further
 		//"collisions" is a word appearing at the end of each network display
 		infoEndCursor = stringyNetworks.find("collisions ", startCursor + 1);
-		/*if(infoEndCursor == string::npos)
-		{
-			cout << "End of info not found. Crashing program." << endl;
-			throw "End of info not found";
-		}*/
 
 		//Then we look for the length of the network name
 		//Getting name
@@ -47,7 +55,7 @@ void WebNode::setNetworks()
 			//If there's an inet, there's an Ipv4 to hack (maybe)
 			//Getting Ipv4
 			endCursor = stringyNetworks.find(maskString, startCursor);
-			string stringyIpv4 = stringyNetworks.substr(
+			string stringyUserIpv4 = stringyNetworks.substr(
 				startCursor + inetString.size(),
 				endCursor - startCursor - inetString.size()
 			);
@@ -65,7 +73,8 @@ void WebNode::setNetworks()
 			cout
 				<< "netName: " << netName << endl
 				<< "netMask: " << stringyMask << endl
-				<< "userIpv4: " << stringyIpv4 << endl;
+				<< "userIpv4: " << stringyUserIpv4 << endl
+				<< "gateIpv4: " << stringyGateIpv4 << endl;
 			
 			//Storing them into a network list
 			//*_networks.push_back(Net(netName, Net::INET, ));*
