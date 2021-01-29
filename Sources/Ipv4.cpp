@@ -7,7 +7,7 @@ using namespace std;
 Ipv4::Ipv4(const string &stringyIp)
 {
 	usi i = 0;
-	for(string stringyWord : explode(".", trim(stringyIp, " \n\r")))
+	for(string stringyWord : lExplode(".", trim(stringyIp, " \n\r")))
 		_words[i++] = atoi(stringyWord.c_str());
 }
 
