@@ -28,6 +28,10 @@ public:
 	void spoof(const Ipv4& router, const Ipv4& target) const;
 	void shutdown(const Ipv4& target) const;
 
+	//Static functions
+	static usi maskToUsi(const string &stringyMask);
+	static usi maskToUsi(const usi &word1, const usi &word2, const usi &word3, const usi &word4);
+
 	//Constants
 	static const usi
 		INET = 1,

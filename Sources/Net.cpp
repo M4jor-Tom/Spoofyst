@@ -1,4 +1,7 @@
 #include "../Headers/Net.h"
+#include "../Stringyst/Headers/Stringyst.h"
+
+#include <bitset>
 
 Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, const Ipv4 &gateIp, const usi &mask):
 	_name(name),
@@ -102,4 +105,20 @@ void Net::shutdown(const Ipv4& target) const
 {
 	//Linux command [shutdown]
 
+}
+
+usi Net::maskToUsi(const string &stringyMask)
+{
+	vector<string> explodedMask = vExplode(".", trim(stringyMask, " \n\r"));
+	return maskToUsi(
+		stoul(explodedMask[0]),
+		stoul(explodedMask[1]),
+		stoul(explodedMask[2]),
+		stoul(explodedMask[3])
+	);
+}
+
+usi Net::maskToUsi(const usi &word1, const usi &word2, const usi &word3, const usi &word4)
+{
+	return 24;
 }

@@ -27,10 +27,9 @@ void WebNode::setNetworks()
 
 	system(clearCommand.c_str());
 
-	cout << "main: " << mainNetName << endl;
-	cout << "stringyGate: " << stringyGate << endl;
-	for(size_t i = 0; i < vectyGate.size(); i++)
-		cout << " / " << vectyGate[i] << endl;
+	/*cout
+		<< "main: " << mainNetName << endl
+		<< "stringyGateIpv4: " << stringyGateIpv4 << endl;*/
 
 	//Converting string return to:
 	//-A list of networks and for each:
@@ -70,14 +69,23 @@ void WebNode::setNetworks()
 			startCursor = endCursor;
 
 			//Printing info
-			cout
+			/*cout
 				<< "netName: " << netName << endl
 				<< "netMask: " << stringyMask << endl
 				<< "userIpv4: " << stringyUserIpv4 << endl
-				<< "gateIpv4: " << stringyGateIpv4 << endl;
+				<< "gateIpv4: " << stringyGateIpv4 << endl;*/
 			
-			//Storing them into a network list
-			//*_networks.push_back(Net(netName, Net::INET, ));*
+			//Storing them into a network list if router ip is found
+			if(mainNetName == netName)
+				_networks.push_back(
+					Net(
+						netName,
+						Net::INET,
+						Ipv4(stringyUserIpv4),
+						Ipv4(stringyGateIpv4),
+						Net::maskToUsi(stringyMask)
+					)
+				);
 		}
 		else if(infoEndCursor != string::npos)
 		{
@@ -110,9 +118,9 @@ void WebNode::setNetworks()
 
 
 	//TESTING
-	_networks.push_back(Net("eno1", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
+	/*_networks.push_back(Net("eno1", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
 	_networks.push_back(Net("usb0", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
-	_networks.push_back(Net("lo", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
+	_networks.push_back(Net("lo", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));*/
 }
 
 void WebNode::displayNetworks()
