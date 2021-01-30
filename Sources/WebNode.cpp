@@ -148,7 +148,12 @@ void WebNode::displayNetworks()
 			else if(increment++ == chosenNetwork)
 			{
 				//Choosing a network
-				network.nmap();
+				if(!network.nmap())
+				{
+					cout << "No device found." << endl << "Press any key to leave" << endl;
+					_getch();
+					system(clearCommand.c_str());
+				}
 				network.displayIpv4s();
 			}
 	}
