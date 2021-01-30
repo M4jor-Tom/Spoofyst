@@ -87,8 +87,8 @@ void WebNode::setNetworks()
 						Net(
 							netName,
 							Net::INET,
-							Ipv4(stringyUserIpv4),
-							Ipv4(stringyGateIpv4),
+							Ipv4(stringyUserIpv4, "USER"),
+							Ipv4(stringyGateIpv4, "GATE"),
 							Net::maskToUsi(stringyMask)
 						)
 					);

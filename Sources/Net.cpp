@@ -22,7 +22,7 @@ void Net::nmap()
 
 	//writing nmap command
 	stringstream nmapCommand;
-	nmapCommand << "nmap -sP " << _userIp.toString() << "/" << _mask;
+	nmapCommand << "nmap -sP " << _userIp.toString(false) << "/" << _mask;
 
 	//Scanning network
 	//cout << nmapCommand.str();
@@ -41,7 +41,7 @@ void Net::nmap()
 				deviceName = actionWords[4],
 				deviceIp = rtrim(ltrim(actionWords[5], "("), ")");
 
-			_ips.push_back(Ipv4(deviceIp));
+			_ips.push_back(Ipv4(deviceIp, deviceName));
 			
 			//cout << deviceName << " :: " << deviceIp << endl;
 			//_getch();
@@ -65,7 +65,7 @@ void Net::displayIpv4s()
 	list<Ipv4> routers;
 
 	for(const Ipv4 &ip : _ips)
-		ipv4sMenu.addChoice(ip.toString());
+		ipv4sMenu.addChoice(ip.toString(true));
 	
 	ipv4sMenu.addExit();
 
@@ -91,7 +91,7 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 
 	while (!optionsMenu.leaving())
 	{
-		switch (optionsMenu.display("[" + _name + "][" + ip.toString() + "] Choose the interaction you want to have with it:"))
+		switch (optionsMenu.display("[" + _name + "][" + ip.getLabel() + "] Choose the interaction you want to have with it:"))
 		{
 		case 0:
 			//Spoof
