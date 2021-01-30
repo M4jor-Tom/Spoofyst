@@ -3,6 +3,9 @@
 
 #include <sstream>
 
+#include <unistd.h>
+#include <limits.h>
+
 using namespace std;
 
 Ipv4::Ipv4(const string &stringyIp, const string &label):
@@ -77,4 +80,12 @@ vector<usi> Ipv4::readIp(const string &stringyIp)
 		}
 	
 	return explodedIp;
+}
+
+string Ipv4::getHostName()
+{
+	char cHostName[HOST_NAME_MAX];
+	gethostname(cHostName, HOST_NAME_MAX);
+	
+	return string(cHostName);
 }

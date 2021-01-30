@@ -26,4 +26,5 @@ public:
 
 	//Static functions
 	static vector<usi> readIp(const string &stringyIp);
+	static string getHostName();
 };
