@@ -109,16 +109,40 @@ void Net::shutdown(const Ipv4& target) const
 
 usi Net::maskToUsi(const string &stringyMask)
 {
-	vector<string> explodedMask = vExplode(".", trim(stringyMask, " \n\r"));
+	vector<usi> explodedMask = Ipv4::readIp(stringyMask);
+
 	return maskToUsi(
-		stoul(explodedMask[0]),
-		stoul(explodedMask[1]),
-		stoul(explodedMask[2]),
-		stoul(explodedMask[3])
+		explodedMask[0],
+		explodedMask[1],
+		explodedMask[2],
+		explodedMask[3]
 	);
 }
 
 usi Net::maskToUsi(const usi &word1, const usi &word2, const usi &word3, const usi &word4)
 {
-	return 24;
+	//Mask's bits consist in 4 bytes
+	vector<bitset<8>> words =
+	{
+		bitset<8>(word1),
+		bitset<8>(word2),
+		bitset<8>(word3),
+		bitset<8>(word4)
+	};
+	
+	//Counting bits
+	usi sIndex, bIndex, ret = 0;
+	for(sIndex = 0; sIndex < 4; sIndex++)
+		//For each byte
+		for(bIndex = 7; bIndex > 0; bIndex--)
+			//For each bit
+			if(words[sIndex].test(bIndex) == true)
+				//Sum
+				ret++;
+			else
+				//Return
+				//I don't know why, but an offset of -2 has to be compensated
+				return ret + 2;
+
+	return 64;
 }
