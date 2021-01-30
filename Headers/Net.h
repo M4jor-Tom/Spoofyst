@@ -14,7 +14,7 @@ public:
 	Net(const string &name, const usi &connectionType, const Ipv4& userIp, const Ipv4& gateIp, const usi &mask);
 
 	//Setters
-	void nmap();
+	bool nmap();
 
 	//Getters
 	string toString() const;

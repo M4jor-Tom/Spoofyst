@@ -15,7 +15,7 @@ Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, cons
 	//nmap();
 }
 
-void Net::nmap()
+bool Net::nmap()
 {
 	//Clearing ips before scanning again
 	_ips.clear();
@@ -34,19 +34,23 @@ void Net::nmap()
 	//Extracting devices data from nmap commandline echoes
 	for(string nmapAction: lExplode("\n", stringyMap))
 	{
+		string deviceName, deviceIp;
 		vector<string> actionWords = vExplode(" ", nmapAction);
-		if(actionWords[0] == "Nmap" && actionWords[1] == "scan")
+		if(
+			actionWords[0] == "Nmap"
+			&& actionWords[1] == "scan"
+			&& (deviceName = actionWords[4]).find(Ipv4::getHostName()) == string::npos
+		)
 		{
-			string
-				deviceName = actionWords[4],
-				deviceIp = rtrim(ltrim(actionWords[5], "("), ")");
-
-			_ips.push_back(Ipv4(deviceIp, deviceName));
+			if((deviceIp = rtrim(ltrim(actionWords[5], "("), ")")) != _gateIp.toString(false))
+				_ips.push_back(Ipv4(deviceIp, deviceName));
 			
 			//cout << deviceName << " :: " << deviceIp << endl;
 			//_getch();
 		}
 	}
+
+	return !_ips.empty();
 }
 
 string Net::toString() const
