@@ -31,13 +31,27 @@ void Net::nmap()
 	string stringyMap = _system(nmapCommand.str().c_str());
 	system(clearCommand.c_str());
 
-	//Extracting Ips from nmap commandline echoes
-	
+	//Extracting devices data from nmap commandline echoes
+	for(string nmapAction: lExplode("\n", stringyMap))
+	{
+		vector<string> actionWords = vExplode(" ", nmapAction);
+		if(actionWords[0] == "Nmap" && actionWords[1] == "scan")
+		{
+			string
+				deviceName = actionWords[4],
+				deviceIp = rtrim(ltrim(actionWords[5], "("), ")");
+
+			_ips.push_back(Ipv4(deviceIp));
+			
+			//cout << deviceName << " :: " << deviceIp << endl;
+			//_getch();
+		}
+	}
 
 	//TESTING
-	_ips.push_back(Ipv4(192, 168, 0, 1));
+	/*_ips.push_back(Ipv4(192, 168, 0, 1));
 	_ips.push_back(Ipv4(192, 168, 0, 3));
-	_ips.push_back(Ipv4(192, 168, 0, 4));
+	_ips.push_back(Ipv4(192, 168, 0, 4));*/
 }
 
 string Net::toString() const
