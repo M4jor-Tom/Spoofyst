@@ -1,5 +1,6 @@
 #include "../Headers/Net.h"
 #include "../Stringyst/Headers/Stringyst.h"
+#include "../Menu/unicommand/Headers/unicommand.h"
 
 #include <bitset>
 
@@ -10,7 +11,8 @@ Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, cons
 	_mask(mask),
 	_connectionType(connectionType)
 {
-	nmap();
+	//Scan network when creating
+	//nmap();
 }
 
 void Net::nmap()
@@ -18,22 +20,24 @@ void Net::nmap()
 	//Clearing ips before scanning again
 	_ips.clear();
 
-	//Scanning
+	//writing nmap command
 	stringstream nmapCommand;
-	nmapCommand << "nmap -sP " << _userIp.toString();
+	nmapCommand << "nmap -sP " << _userIp.toString() << "/" << _mask;
 
+	//Scanning network
+	//cout << nmapCommand.str();
+	system(clearCommand.c_str());
+	cout << "[" << _name << "] Scanning network..." << endl;
 	string stringyMap = _system(nmapCommand.str().c_str());
+	system(clearCommand.c_str());
 
-	//Linux command [nmap]
-	//Getting Ips of the whole network,
-	//*It is required to ommit ips of the user and the router
-	//*figuring in the class' attributes
-
+	//Extracting Ips from nmap commandline echoes
+	
 
 	//TESTING
-	_ips.push_back(Ipv4(192, 168, 0, 1));// , Ipv4::OTHER));
-	_ips.push_back(Ipv4(192, 168, 0, 3));// , Ipv4::OTHER));
-	_ips.push_back(Ipv4(192, 168, 0, 4));// , Ipv4::OTHER));
+	_ips.push_back(Ipv4(192, 168, 0, 1));
+	_ips.push_back(Ipv4(192, 168, 0, 3));
+	_ips.push_back(Ipv4(192, 168, 0, 4));
 }
 
 string Net::toString() const
@@ -51,8 +55,8 @@ void Net::displayIpv4s()
 	Menu ipv4sMenu;
 	list<Ipv4> routers;
 
-
-	for (const Ipv4 &ip : _ips)
+	for(const Ipv4 &ip : _ips)
+		//{cout << ip.toString(); _getch();}
 		ipv4sMenu.addChoice(ip.toString());
 	
 	ipv4sMenu.addExit();
@@ -141,8 +145,8 @@ usi Net::maskToUsi(const usi &word1, const usi &word2, const usi &word3, const u
 				ret++;
 			else
 				//Return
-				//I don't know why, but an offset of -2 has to be compensated
-				return ret + 2;
+				//I don't know why, but an offset of -3 has to be compensated
+				return ret + 3;
 
 	return 64;
 }
