@@ -13,6 +13,9 @@ WebNode::WebNode()
 
 void WebNode::setNetworks()
 {
+	//Clear before scanning
+	_networks.clear();
+
 	//Linux command [ifconfig]
 	cout << "Scanning available networks..." << endl;
 
@@ -115,18 +118,14 @@ void WebNode::setNetworks()
 			<< "endCursor: " << endCursor << endl
 			<< "infoEndCursor: " << infoEndCursor << endl;*/
 	}
-
-
-	//TESTING
-	/*_networks.push_back(Net("eno1", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
-	_networks.push_back(Net("usb0", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));
-	_networks.push_back(Net("lo", Net::ETHER, Ipv4(192, 168, 1, 2), Ipv4(192, 168, 0, 0), 24));*/
 }
 
 void WebNode::displayNetworks()
 {
 	Menu networkMenu;
 
+	networkMenu.addChoice("Reload networks");
+	
 	for(const Net& network : _networks)
 		networkMenu.addChoice(network.toString());
 
@@ -136,11 +135,15 @@ void WebNode::displayNetworks()
 	{
 		unsigned int
 			chosenNetwork = networkMenu.display("Choose a network:"),
-			increment = 0;
+			increment = 1;
 
 		for (Net &network : _networks)
-			if (increment++ == chosenNetwork)
+			if(chosenNetwork == 0)
+				//Reload
+				setNetworks();
+			else if(increment++ == chosenNetwork)
 			{
+				//Choosing a network
 				network.nmap();
 				network.displayIpv4s();
 			}
