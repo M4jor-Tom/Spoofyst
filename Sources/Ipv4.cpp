@@ -28,11 +28,16 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 Ipv4::Ipv4(const Ipv4 &toCopy):
 	Ipv4()
 {
-	_words = toCopy._words;
+	_words[0] = toCopy._words[0];
+	_words[1] = toCopy._words[1];
+	_words[2] = toCopy._words[2];
+	_words[3] = toCopy._words[3];
 }
 
 string Ipv4::toString() const
 {
+	//cout << "IP words:  " << _words[0] << "." << _words[1] << "." << _words[2] << "." << _words[3] << endl;
+	//cout << "IP string: " << toSstream().str() << endl;
 	return toSstream().str();
 }
 
@@ -40,16 +45,15 @@ stringstream Ipv4::toSstream() const
 {
 	stringstream _toSstream;
 	usi i = 0;
-	for (usi word : _words)
+	for(; i < 4; i++)//(usi word : _words)
 	{
-		_toSstream << word;
-		if (++i != _words.size())
+		_toSstream << _words[i];
+		if (i != 4 - 1)
 			_toSstream << ".";
 	}
 	
 	return _toSstream;
 }
-
 
 vector<usi> Ipv4::readIp(const string &stringyIp)
 {
