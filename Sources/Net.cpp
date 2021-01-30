@@ -47,11 +47,6 @@ void Net::nmap()
 			//_getch();
 		}
 	}
-
-	//TESTING
-	/*_ips.push_back(Ipv4(192, 168, 0, 1));
-	_ips.push_back(Ipv4(192, 168, 0, 3));
-	_ips.push_back(Ipv4(192, 168, 0, 4));*/
 }
 
 string Net::toString() const
@@ -70,18 +65,17 @@ void Net::displayIpv4s()
 	list<Ipv4> routers;
 
 	for(const Ipv4 &ip : _ips)
-		//{cout << ip.toString(); _getch();}
 		ipv4sMenu.addChoice(ip.toString());
 	
 	ipv4sMenu.addExit();
 
-	while (!ipv4sMenu.leaving())
+	while(!ipv4sMenu.leaving())
 	{
 		unsigned int
-			chosenIpv4 = ipv4sMenu.display("Choose the Ipv4 of a machine you wish to interact with:"),
+			chosenIpv4 = ipv4sMenu.display("[" + _name + "] Choose the Ipv4 of a machine you wish to interact with:"),
 			increment = 0;
 
-		for (const Ipv4 &ip : _ips)
+		for(const Ipv4 &ip : _ips)
 			if (increment++ == chosenIpv4)
 				attackMenu(routers, ip);
 	}
@@ -97,7 +91,7 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 
 	while (!optionsMenu.leaving())
 	{
-		switch (optionsMenu.display("Choose the interaction you want to have with it:"))
+		switch (optionsMenu.display("[" + _name + "][" + ip.toString() + "] Choose the interaction you want to have with it:"))
 		{
 		case 0:
 			//Spoof
