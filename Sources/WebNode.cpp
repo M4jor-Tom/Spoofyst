@@ -22,101 +22,105 @@ void WebNode::setNetworks()
 	//May use netstat instead of ifconfig
 	string
 		stringyNetworks = _system("ifconfig -a"),
-		stringyGate = _system("ip route | grep default");
-	vector<string> vectyGate = vExplode(" ", stringyGate);
-	string
-		stringyGateIpv4 = vectyGate[2],
-		mainNetName = vectyGate[4];
-
+		stringyGates = _system("ip route | grep default");
+	vector<string> gates = vExplode("\n", trim(stringyGates, "\n\r "));
 	system(clearCommand.c_str());
 
-	/*cout
-		<< "main: " << mainNetName << endl
-		<< "stringyGateIpv4: " << stringyGateIpv4 << endl;*/
-
-	//Converting string return to:
-	//-A list of networks and for each:
-	//--User Ip
-	//--Router Ip
-	size_t startCursor = 0, endCursor = 0, infoEndCursor = 0;
-	while(infoEndCursor != string::npos)
+	for(string gate: gates)
 	{
-		//First we check where are the last informations to look for, to avoid messingly looking further
-		//"collisions" is a word appearing at the end of each network display
-		infoEndCursor = stringyNetworks.find("collisions ", startCursor + 1);
-
-		//Then we look for the length of the network name
-		//Getting name
-		endCursor = stringyNetworks.find(":", startCursor);
-		string netName = stringyNetworks.substr(startCursor, endCursor - startCursor);
-		startCursor = endCursor;
-
-		string inetString = "inet ", maskString = "netmask ";
-		if((startCursor = stringyNetworks.find(inetString, startCursor)) < infoEndCursor)
-		{
-			//If there's an inet, there's an Ipv4 to hack (maybe)
-			//Getting Ipv4
-			endCursor = stringyNetworks.find(maskString, startCursor);
-			string stringyUserIpv4 = stringyNetworks.substr(
-				startCursor + inetString.size(),
-				endCursor - startCursor - inetString.size()
-			);
-			startCursor = endCursor;
-
-			//Getting netmask
-			endCursor = stringyNetworks.find(" ", startCursor);
-			string stringyMask = stringyNetworks.substr(
-				startCursor + maskString.size(),
-				endCursor - startCursor + maskString.size()
-			);
-			startCursor = endCursor;
-
-			//Printing info
-			/*cout
-				<< "netName: " << netName << endl
-				<< "netMask: " << stringyMask << endl
-				<< "userIpv4: " << stringyUserIpv4 << endl
-				<< "gateIpv4: " << stringyGateIpv4 << endl;*/
-			
-			//Storing them into a network list if router ip is found
-			if(mainNetName == netName)
-				_networks.push_back(
-					Net(
-						netName,
-						Net::INET,
-						Ipv4(stringyUserIpv4),
-						Ipv4(stringyGateIpv4),
-						Net::maskToUsi(stringyMask)
-					)
-				);
-		}
-		else if(infoEndCursor != string::npos)
-		{
-			//Ending loop
-			endCursor = infoEndCursor;
-
-			//Skipping "collisions" word
-			while(isalpha(stringyNetworks[endCursor]))
-				endCursor++;
-			
-			//Skipping whitespace between "collisions" and collisions count
-			endCursor++;
-
-			//Skipping collisions count
-			while(isdigit(stringyNetworks[endCursor]))
-				endCursor++;
-			
-			//Skipping carriage returns
-			endCursor += 2;
-
-			startCursor = endCursor;
-		}
+		vector<string> vectyGate = vExplode(" ", gate);
+		string
+			stringyGateIpv4 = vectyGate[2],
+			_netName = vectyGate[4];
 
 		/*cout
-			<< "loop end: " << endl
-			<< "startCursor: " << startCursor << endl
-			<< "endCursor: " << endCursor << endl
-			<< "infoEndCursor: " << infoEndCursor << endl;*/
+			<< "main: " << _netName << endl
+			<< "stringyGateIpv4: " << stringyGateIpv4 << endl;*/
+
+		//Converting string return to:
+		//-A list of networks and for each:
+		//--User Ip
+		//--Router Ip
+		size_t startCursor = 0, endCursor = 0, infoEndCursor = 0;
+		while(infoEndCursor != string::npos)
+		{
+			//First we check where are the last informations to look for, to avoid messingly looking further
+			//"collisions" is a word appearing at the end of each network display
+			infoEndCursor = stringyNetworks.find("collisions ", startCursor + 1);
+
+			//Then we look for the length of the network name
+			//Getting name
+			endCursor = stringyNetworks.find(":", startCursor);
+			string netName = stringyNetworks.substr(startCursor, endCursor - startCursor);
+			startCursor = endCursor;
+
+			string inetString = "inet ", maskString = "netmask ";
+			if((startCursor = stringyNetworks.find(inetString, startCursor)) < infoEndCursor)
+			{
+				//If there's an inet, there's an Ipv4 to hack (maybe)
+				//Getting Ipv4
+				endCursor = stringyNetworks.find(maskString, startCursor);
+				string stringyUserIpv4 = stringyNetworks.substr(
+					startCursor + inetString.size(),
+					endCursor - startCursor - inetString.size()
+				);
+				startCursor = endCursor;
+
+				//Getting netmask
+				endCursor = stringyNetworks.find(" ", startCursor);
+				string stringyMask = stringyNetworks.substr(
+					startCursor + maskString.size(),
+					endCursor - startCursor + maskString.size()
+				);
+				startCursor = endCursor;
+
+				//Printing info
+				/*cout
+					<< "netName: " << netName << endl
+					<< "netMask: " << stringyMask << endl
+					<< "userIpv4: " << stringyUserIpv4 << endl
+					<< "gateIpv4: " << stringyGateIpv4 << endl;*/
+				
+				//Storing them into a network list if router ip is found [double check]
+				if(_netName == netName)
+					_networks.push_back(
+						Net(
+							netName,
+							Net::INET,
+							Ipv4(stringyUserIpv4),
+							Ipv4(stringyGateIpv4),
+							Net::maskToUsi(stringyMask)
+						)
+					);
+			}
+			else if(infoEndCursor != string::npos)
+			{
+				//Ending loop
+				endCursor = infoEndCursor;
+
+				//Skipping "collisions" word
+				while(isalpha(stringyNetworks[endCursor]))
+					endCursor++;
+				
+				//Skipping whitespace between "collisions" and collisions count
+				endCursor++;
+
+				//Skipping collisions count
+				while(isdigit(stringyNetworks[endCursor]))
+					endCursor++;
+				
+				//Skipping carriage returns
+				endCursor += 2;
+
+				startCursor = endCursor;
+			}
+
+			/*cout
+				<< "loop end: " << endl
+				<< "startCursor: " << startCursor << endl
+				<< "endCursor: " << endCursor << endl
+				<< "infoEndCursor: " << infoEndCursor << endl;*/
+		}
 	}
 }
 
