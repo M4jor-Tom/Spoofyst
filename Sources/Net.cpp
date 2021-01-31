@@ -37,8 +37,8 @@ bool Net::nmap()
 		string deviceName, deviceIp;
 		vector<string> actionWords = vExplode(" ", nmapAction);
 		if(
-			actionWords[0] == "Nmap"
-			&& actionWords[1] == "scan"
+			actionWords.at(0) == "Nmap"
+			&& actionWords.at(1) == "scan"
 			&& (deviceName = actionWords[4]).find(Ipv4::getHostName()) == string::npos
 		)
 		{
@@ -128,10 +128,10 @@ usi Net::maskToUsi(const string &stringyMask)
 	vector<usi> explodedMask = Ipv4::readIp(stringyMask);
 
 	return maskToUsi(
-		explodedMask[0],
-		explodedMask[1],
-		explodedMask[2],
-		explodedMask[3]
+		explodedMask.at(0),
+		explodedMask.at(1),
+		explodedMask.at(2),
+		explodedMask.at(3)
 	);
 }
 

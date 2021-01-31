@@ -30,8 +30,8 @@ void WebNode::setNetworks()
 	{
 		vector<string> vectyGate = vExplode(" ", gate);
 		string
-			stringyGateIpv4 = vectyGate[2],
-			_netName = vectyGate[4];
+			stringyGateIpv4 = vectyGate.at(2),
+			_netName = vectyGate.at(4);
 
 		/*cout
 			<< "main: " << _netName << endl

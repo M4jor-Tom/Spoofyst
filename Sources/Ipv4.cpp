@@ -19,20 +19,20 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 	_label(label)
 {
 	_words.reserve(4);
-	_words[0] = word1;
-	_words[1] = word2;
-	_words[2] = word3;
-	_words[3] = word4;
+	_words.at(0) = word1;
+	_words.at(1) = word2;
+	_words.at(2) = word3;
+	_words.at(3) = word4;
 }
 
 Ipv4::Ipv4(const Ipv4 &toCopy):
 	_label(toCopy._label)
 {
 	_words.reserve(4);
-	_words[0] = toCopy._words[0];
-	_words[1] = toCopy._words[1];
-	_words[2] = toCopy._words[2];
-	_words[3] = toCopy._words[3];
+	_words.at(0) = toCopy._words.at(0);
+	_words.at(1) = toCopy._words.at(1);
+	_words.at(2) = toCopy._words.at(2);
+	_words.at(3) = toCopy._words.at(3);
 }
 
 string Ipv4::getLabel() const
@@ -42,7 +42,7 @@ string Ipv4::getLabel() const
 
 string Ipv4::toString(bool label) const
 {
-	//cout << "IP words:  " << _words[0] << "." << _words[1] << "." << _words[2] << "." << _words[3] << endl;
+	//cout << "IP words:  " << _words.at(0) << "." << _words.at(1) << "." << _words.at(2) << "." << _words.at(3) << endl;
 	//cout << "IP string: " << toSstream().str() << endl;
 	return toSstream(label).str();
 }
@@ -54,7 +54,7 @@ stringstream Ipv4::toSstream(bool label) const
 	usi i = 0;
 	for(; i < 4; i++)//(usi word : _words)
 	{
-		_toSstream << _words[i];
+		_toSstream << _words.at(i);
 		if (i != 4 - 1)
 			_toSstream << ".";
 	}
