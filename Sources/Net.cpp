@@ -34,15 +34,24 @@ bool Net::nmap()
 	//Extracting devices data from nmap commandline echoes
 	for(string nmapAction: lExplode("\n", stringyMap))
 	{
-		string deviceName, deviceIp;
 		vector<string> actionWords = vExplode(" ", nmapAction);
+		string
+			deviceName = actionWords.at(4),
+			deviceIp;
+		usi ipIndex = 5;
+		if(actionWords.size() < 5)
+		{
+			ipIndex = 4;
+			deviceName = "Unkown";
+		}
+		
 		if(
 			actionWords.at(0) == "Nmap"
 			&& actionWords.at(1) == "scan"
-			&& (deviceName = actionWords[4]).find(Ipv4::getHostName()) == string::npos
+			&& deviceName.find(Ipv4::getHostName()) == string::npos
 		)
 		{
-			if((deviceIp = rtrim(ltrim(actionWords[5], "("), ")")) != _gateIp.toString(false))
+			if((deviceIp = rtrim(ltrim(actionWords.at(ipIndex), "("), ")")) != _gateIp.toString(false))
 				_ips.push_back(Ipv4(deviceIp, deviceName));
 			
 			//cout << deviceName << " :: " << deviceIp << endl;
