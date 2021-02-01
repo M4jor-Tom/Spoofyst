@@ -52,9 +52,6 @@ bool Net::nmap()
 			//Scanning echo
 			actionWords[0] == "Nmap"
 			&& actionWords[1] == "scan"
-
-			//AND Current device name does not correspond to the current scanning echo
-			&& deviceName.find(Ipv4::getHostName()) == string::npos
 		)
 		{
 			
@@ -63,7 +60,7 @@ bool Net::nmap()
 			if(unnamedDevice)
 				deviceName = "Device::" + deviceIp;
 			
-			if(deviceIp != _gateIp.toString(false))
+			if(deviceIp != _gateIp.toString(false) && deviceIp != _userIp.toString(false))
 			{
 				//cout << deviceName << " :: " << deviceIp << " -- " << Ipv4(deviceIp, deviceName).toString(true) << endl;
 				//_getch();
