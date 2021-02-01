@@ -22,10 +22,10 @@ public:
 
 	//Displayers
 	void displayIpv4s();
-	void attackMenu(list<Ipv4> routers, const Ipv4 &ip);
+	void attackMenu(const Ipv4 &ip);
 
 	//Attackers
-	void spoof(const Ipv4& router, const Ipv4& target) const;
+	void spoof(const Ipv4& target) const;
 	void shutdown(const Ipv4& target) const;
 
 	//Static functions

