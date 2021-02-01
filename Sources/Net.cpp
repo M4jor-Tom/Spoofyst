@@ -139,7 +139,13 @@ void Net::spoof(const Ipv4& router, const Ipv4& target) const
 void Net::shutdown(const Ipv4& target) const
 {
 	//Linux command [shutdown]
-
+	#if defined(_WIN64) or defined(_WIN32)
+	string shutdownCommand = "shutdown -m \\ " + target.toString(false) + "-r -f";
+	system(shutdownCommand.c_str());
+	#else
+	cout << "This feature is enabled only in windows." << endl << "Press any key to leave" << endl;
+	_getch();
+	#endif
 }
 
 usi Net::maskToUsi(const string &stringyMask)
