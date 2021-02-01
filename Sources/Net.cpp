@@ -22,7 +22,7 @@ bool Net::nmap()
 
 	//writing nmap command
 	stringstream nmapCommand;
-	nmapCommand << "nmap -sP " << _userIp.toString(false) << "/" << _mask;
+	nmapCommand << "nmap -sP " << _userIp.toString(false) << "/" << _mask;// << " | grep Nmap scan";
 
 	//Scanning network
 	//cout << nmapCommand.str();
@@ -36,17 +36,39 @@ bool Net::nmap()
 	{
 		string deviceName, deviceIp;
 		vector<string> actionWords = vExplode(" ", nmapAction);
+		usi ipIndex = 5;
+		bool unnamedDevice = false;
+
+		if(actionWords.size() <= 5)
+		{
+			ipIndex = 4;
+			unnamedDevice = true;
+		}
+		else
+			deviceName = actionWords[4];
+
+		
 		if(
+			//Scanning echo
 			actionWords[0] == "Nmap"
 			&& actionWords[1] == "scan"
-			&& (deviceName = actionWords[4]).find(Ipv4::getHostName()) == string::npos
+
+			//AND Current device name does not correspond to the current scanning echo
+			&& deviceName.find(Ipv4::getHostName()) == string::npos
 		)
 		{
-			if((deviceIp = rtrim(ltrim(actionWords[5], "("), ")")) != _gateIp.toString(false))
-				_ips.push_back(Ipv4(deviceIp, deviceName));
 			
-			//cout << deviceName << " :: " << deviceIp << endl;
-			//_getch();
+			deviceIp = rtrim(ltrim(actionWords[ipIndex], "("), ")");
+
+			if(unnamedDevice)
+				deviceName = "Device::" + deviceIp;
+			
+			if(deviceIp != _gateIp.toString(false))
+			{
+				//cout << deviceName << " :: " << deviceIp << " -- " << Ipv4(deviceIp, deviceName).toString(true) << endl;
+				//_getch();
+				_ips.push_back(Ipv4(deviceIp, deviceName));
+			}
 		}
 	}
 
