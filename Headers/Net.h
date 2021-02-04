@@ -25,7 +25,7 @@ public:
 	void attackMenu(const Ipv4 &ip);
 
 	//Attackers
-	void spoof(const Ipv4& target) const;
+	void arpSpoof(bool forward, const Ipv4& target) const;
 	void shutdown(const Ipv4& target) const;
 
 	//Static functions

