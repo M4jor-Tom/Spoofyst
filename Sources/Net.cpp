@@ -119,9 +119,9 @@ void Net::attackMenu(const Ipv4 &ip)
 {
 	Menu optionsMenu;
 
-	optionsMenu.addChoice("Cut");
-	optionsMenu.addChoice("Spoof");
-	optionsMenu.addChoice("Shutdown");
+	optionsMenu.addChoice("Cut", Text::FG_LIGHT_RED);
+	optionsMenu.addChoice("Spoof", Text::FG_LIGHT_RED);
+	optionsMenu.addChoice("Shutdown", Text::FG_LIGHT_RED);
 	optionsMenu.addExit();
 
 	while (!optionsMenu.leaving())
