@@ -86,6 +86,13 @@ bool Net::nmap()
 		}
 	}
 
+	//Menu filling
+	_ipv4sMenu.clear();
+	_ipv4sMenu.addChoice(Text::textEffect(Text::BOLD, "Rescan network"), Text::FG_GREEN);
+	for(const Ipv4 &ip : _ips)
+		_ipv4sMenu.addChoice(ip.toString(true));
+	_ipv4sMenu.addExit();
+
 	return !_ips.empty();
 }
 
@@ -100,23 +107,20 @@ size_t Net::getIpCount() const
 }
 
 void Net::displayIpv4s()
-{
-	Menu ipv4sMenu;
-	list<Ipv4> routers;
-
-	for(const Ipv4 &ip : _ips)
-		ipv4sMenu.addChoice(ip.toString(true));
-	
-	ipv4sMenu.addExit();
-
-	while(!ipv4sMenu.leaving())
+{	
+	while(!_ipv4sMenu.leaving())
 	{
 		unsigned int
-			chosenIpv4 = ipv4sMenu.display("[" + _name + "] Choose the Ipv4 of a machine you wish to interact with:"),
+			choice = _ipv4sMenu.display("[" + _name + "] Choose the Ipv4 of a machine you wish to interact with:"),
 			increment = 0;
+		
+		if(increment++ == choice)
+		{
+			nmap();
+		}
 
 		for(const Ipv4 &ip : _ips)
-			if (increment++ == chosenIpv4)
+			if (increment++ == choice)
 				attackMenu(ip);
 	}
 }

@@ -5,6 +5,7 @@
 class Net
 {
 private:
+	Menu _ipv4sMenu;
 	const string _name;
 	list<Ipv4> _ips;
 	Ipv4 _userIp, _gateIp;
