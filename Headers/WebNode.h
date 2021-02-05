@@ -7,6 +7,7 @@ using namespace std;
 class WebNode
 {
 private:
+	Menu _networkMenu;
 	list<Net> _networks;
 
 public:

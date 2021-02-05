@@ -122,39 +122,44 @@ void WebNode::setNetworks()
 				<< "infoEndCursor: " << infoEndCursor << endl;*/
 		}
 	}
+
+	//Menu filling
+	_networkMenu.clear();
+	_networkMenu.addChoice("Reload networks");
+	//_networkMenu.addLocked("Reload networks");
+	
+	for(const Net& network : _networks)
+		_networkMenu.addChoice(network.toString());
+
+	_networkMenu.addExit();
 }
 
 void WebNode::displayNetworks()
 {
-	Menu networkMenu;
-
-	networkMenu.addChoice("Reload networks");
-	
-	for(const Net& network : _networks)
-		networkMenu.addChoice(network.toString());
-
-	networkMenu.addExit();
-
-	while (!networkMenu.leaving())
+	while(!_networkMenu.leaving())
 	{
 		unsigned int
-			chosenNetwork = networkMenu.display("Choose a network:"),
-			increment = 1;
+			chosenNetwork = _networkMenu.display("Choose a network:"),
+			increment = 0;
 
-		for (Net &network : _networks)
-			if(chosenNetwork == 0)
+		for (Net &network: _networks)
+		{
+
+			if(increment++ == chosenNetwork)
 				//Reload
 				setNetworks();
 			else if(increment++ == chosenNetwork)
 			{
 				//Choosing a network
-				if(!network.nmap())
+				if(network.nmap())
+					network.displayIpv4s();
+				else
 				{
 					cout << "No device found." << endl << "Press any key to leave" << endl;
 					_getch();
 					system(clearCommand.c_str());
 				}
-				network.displayIpv4s();
 			}
+		}
 	}
 }
