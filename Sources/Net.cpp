@@ -1,6 +1,7 @@
 #include "../Headers/Net.h"
 #include "../Stringyst/Headers/Stringyst.h"
 #include "../Menu/unicommand/Headers/unicommand.h"
+#include "../Menu/TextModyst/Headers/Modyst.h"
 
 #include <bitset>
 
@@ -37,7 +38,7 @@ bool Net::nmap()
 	//Scanning network
 	//cout << nmapCommand.str();
 	system(clearCommand.c_str());
-	cout << "[" << _name << "] Scanning network..." << endl;
+	cout << "[" << _name << "] " << Text::textEffect(Text::BLINK, "Scanning network...") << endl;
 	string stringyMap = _system(nmapCommand.str().c_str());
 	system(clearCommand.c_str());
 
