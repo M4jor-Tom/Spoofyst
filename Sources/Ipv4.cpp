@@ -35,6 +35,11 @@ Ipv4::Ipv4(const Ipv4 &toCopy):
 	_words[3] = toCopy._words[3];
 }
 
+Ipv4::~Ipv4()
+{
+	
+}
+
 string Ipv4::getLabel() const
 {
 	return _label;

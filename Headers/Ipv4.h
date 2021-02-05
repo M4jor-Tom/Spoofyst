@@ -19,6 +19,9 @@ public:
 	Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word4, const string &label);
 	Ipv4(const Ipv4 &toCopy);
 
+	//Destructors
+	~Ipv4();
+
 	//Getters
 	string getLabel() const;
 	string toString(bool label) const;

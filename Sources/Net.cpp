@@ -16,6 +16,12 @@ Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, cons
 	//nmap();
 }
 
+Net::~Net()
+{
+	//cout << "Network " << _name << " removed" << endl;
+	//_getch();
+}
+
 bool Net::nmap()
 {
 	//Clearing ips before scanning again

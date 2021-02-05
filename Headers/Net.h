@@ -13,6 +13,9 @@ public:
 	//Constructors
 	Net(const string &name, const usi &connectionType, const Ipv4& userIp, const Ipv4& gateIp, const usi &mask);
 
+	//Destructors
+	~Net();
+
 	//Setters
 	bool nmap();
 
