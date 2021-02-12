@@ -125,8 +125,8 @@ void WebNode::setNetworks()
 
 	//Menu filling
 	_networkMenu.clear();
-	_networkMenu.addChoice("Reload networks");
-	//_networkMenu.addLocked("Reload networks");
+	//_networkMenu.addChoice("Reload networks");
+	_networkMenu.addLocked("Reload networks");
 	
 	for(const Net& network : _networks)
 		_networkMenu.addChoice(network.toString());
