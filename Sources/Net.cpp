@@ -31,12 +31,12 @@ bool Net::nmap()
 	stringstream nmapCommand;
 	string nmapOption, sudo = "";
 	
-	if(_system("whoami").find("root") != string::npos)
+	/*if(_system("whoami").find("root") != string::npos)
 	{
 		sudo = "sudo ";
 		nmapOption = "-sX ";
 	}
-	else
+	else*/
 		nmapOption = "-sn ";
 	
 	nmapCommand << sudo << "nmap " << nmapOption << _userIp.toString(false) << "/" << _mask;// << " | grep Nmap scan";
