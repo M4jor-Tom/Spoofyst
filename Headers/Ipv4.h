@@ -12,6 +12,7 @@ class Ipv4
 private:
 	vector<usi> _words;
 	const string _label;
+	pid_t _attackerPid;
 
 public:
 	//Constructors
@@ -22,10 +23,14 @@ public:
 	//Destructors
 	~Ipv4();
 
+	//Setters
+	bool setAttackerPid(const pid_t attackerPid);
+
 	//Getters
 	string getLabel() const;
 	string toString(bool label) const;
 	stringstream toSstream(bool label) const;
+	pid_t getAttackerPid() const;
 
 	//Static functions
 	static vector<usi> readIp(const string &stringyIp);

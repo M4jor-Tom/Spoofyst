@@ -163,3 +163,9 @@ void WebNode::displayNetworks()
 		}
 	}
 }
+
+void WebNode::killChilds()
+{
+	for(Net& network:_networks)
+		network.killChilds();
+}

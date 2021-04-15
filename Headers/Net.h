@@ -10,6 +10,7 @@ private:
 	list<Ipv4> _ips;
 	Ipv4 _userIp, _gateIp;
 	const usi _mask, _connectionType;
+	
 public:
 	//Constructors
 	Net(const string &name, const usi &connectionType, const Ipv4& userIp, const Ipv4& gateIp, const usi &mask);
@@ -26,11 +27,15 @@ public:
 
 	//Displayers
 	void displayIpv4s();
-	void attackMenu(const Ipv4 &ip);
+	void attackMenu(Ipv4 &ip);
 
 	//Attackers
-	void arpSpoof(bool forward, const Ipv4& target) const;
+	void arpSpoof(bool forward, Ipv4& target);
 	void shutdown(const Ipv4& target) const;
+
+	//Process managers
+	void killChilds();
+	void stopAttacks(Ipv4& target);
 
 	//Static functions
 	static usi maskToUsi(const string &stringyMask);

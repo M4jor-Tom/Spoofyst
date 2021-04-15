@@ -19,4 +19,7 @@ public:
 
 	//Displayers
 	void displayNetworks();
+
+	//Process managers
+	void killChilds();
 };

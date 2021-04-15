@@ -5,6 +5,10 @@
 
 #include <bitset>
 
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
+
 Net::Net(const string& name, const usi& connectionType, const Ipv4 &userIp, const Ipv4 &gateIp, const usi &mask):
 	_name(name),
 	_userIp(Ipv4(userIp)),
@@ -90,7 +94,14 @@ bool Net::nmap()
 	_ipv4sMenu.clear();
 	_ipv4sMenu.addChoice(Text::textEffect(Text::BOLD, "Rescan network"), Text::FG_GREEN);
 	for(const Ipv4 &ip : _ips)
-		_ipv4sMenu.addChoice(ip.toString(true));
+	{
+		Text::Code ipEffect = ip.getAttackerPid() == 0
+			? Text::FG_BLUE
+			: Text::FG_YELLOW;
+		stringstream pid;
+		pid << ip.getAttackerPid();
+		_ipv4sMenu.addChoice(Text::setMod(ipEffect) + ip.toString(true) + Text::clearMods() + pid.str());
+	}
 	_ipv4sMenu.addExit();
 
 	return !_ips.empty();
@@ -119,13 +130,13 @@ void Net::displayIpv4s()
 			nmap();
 		}
 
-		for(const Ipv4 &ip : _ips)
+		for(Ipv4 &ip : _ips)
 			if (increment++ == choice)
 				attackMenu(ip);
 	}
 }
 
-void Net::attackMenu(const Ipv4 &ip)
+void Net::attackMenu(Ipv4 &ip)
 {
 	Menu optionsMenu;
 
@@ -153,11 +164,16 @@ void Net::attackMenu(const Ipv4 &ip)
 			//Shutdown
 			shutdown(ip);
 			break;
+
+		case 3:
+			//Stop attacks
+			stopAttacks(ip);
+			break;
 		}
 	}
 }
 
-void Net::arpSpoof(bool forward, const Ipv4& target) const
+void Net::arpSpoof(bool forward, Ipv4& target)
 {
 	//Linux command [arpspoof]
 	#ifdef __linux__
@@ -198,19 +214,50 @@ void Net::arpSpoof(bool forward, const Ipv4& target) const
 	
 	cout << "Push any key to run attack" << endl << endl;
 	_getch();
-	
-	if(forward)
-		system(ipforwardCommand.c_str());
-	
-	system(spoofCommand.c_str());
 
-	if(forward)
+	
+	//Fork into an attecker child process
+	if(target.getAttackerPid() == 0)
 	{
-		system(reverseSpoofCommand.c_str());
-		system(ipbackwardCommand.c_str());
-	}
+		pid_t attackerPid = 1;//fork();
+		
+		if(attackerPid)
+		{
+			//FATHER PROCESS
+			if(target.setAttackerPid(attackerPid))
+			{
+				cout << "Begin attack";
+				_getch();
+			}
+			else
+				cout
+					<< Text::setMod(Text::BG_LIGHT_RED) << "FATAL ERROR WHILE CREATING ATTACK PROCESS."
+					<< endl << "LEAVE PROGRAM ASAP" << Text::clearMods();
+		}/*
+		else
+		{
+			//HERE IN SON PROCESS
+			if(forward)
+				system(ipforwardCommand.c_str());
 
-	system(clearCommand.c_str());
+			system(spoofCommand.c_str());
+
+			if(forward)
+			{
+				system(reverseSpoofCommand.c_str());
+				system(ipbackwardCommand.c_str());
+			}
+
+			system(clearCommand.c_str());
+			exit(0);
+		}*/
+	}
+	else
+	{
+		cout << "This device is already being attacked." << endl << "Press any key to leave" << endl;
+		_getch();
+	}
+	
 	#endif
 }
 
@@ -224,6 +271,38 @@ void Net::shutdown(const Ipv4& target) const
 	cout << "This feature is enabled only in windows." << endl << "Press any key to leave" << endl;
 	_getch();
 	#endif
+}
+
+void Net::killChilds()
+{
+	for(Ipv4& ip: _ips)
+		stopAttacks(ip);
+}
+
+void Net::stopAttacks(Ipv4& target)
+{
+	if(target.getAttackerPid() == 0)
+	{
+		cout 
+			<< "No attacks running."
+			<< endl << "Press any key to leave";
+		
+		_getch();
+		return;
+	}
+
+	//Clear screen
+	system(clearCommand.c_str());
+
+	//Tell to child to end attack process
+	//kill(target.getAttackerPid(), SIGINT);
+
+	//Waiting for process' end
+	cout << Text::textEffect(Text::BLINK, "Stopping attack...") << endl;
+	//wait(NULL);
+
+	//Clearing target's attacker pid
+	target.setAttackerPid(0);
 }
 
 usi Net::maskToUsi(const string &stringyMask)

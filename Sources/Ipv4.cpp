@@ -1,22 +1,26 @@
 #include "../Headers/Ipv4.h"
 #include "../Stringyst/Headers/Stringyst.h"
+#include "../Menu/unicommand/Headers/unicommand.h"
 
 #include <sstream>
 
 #include <unistd.h>
 #include <limits.h>
 
+#include <signal.h>
+#include <sys/wait.h>
+
 using namespace std;
 
 Ipv4::Ipv4(const string &stringyIp, const string &label):
-	_label(label)
+	_label(label), _attackerPid(0)
 {
 	_words.reserve(4);
 	_words = readIp(stringyIp);
 }
 
 Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word4, const string &label):
-	_label(label)
+	_label(label), _attackerPid(0)
 {
 	_words.reserve(4);
 	_words[0] = word1;
@@ -26,7 +30,7 @@ Ipv4::Ipv4(const usi& word1, const usi& word2, const usi& word3, const usi& word
 }
 
 Ipv4::Ipv4(const Ipv4 &toCopy):
-	_label(toCopy._label)
+	_label(toCopy._label), _attackerPid(toCopy._attackerPid)
 {
 	_words.reserve(4);
 	_words[0] = toCopy._words[0];
@@ -37,7 +41,29 @@ Ipv4::Ipv4(const Ipv4 &toCopy):
 
 Ipv4::~Ipv4()
 {
+	if(getAttackerPid() != 0)
+	{
+		//In case an attack is still running, stopping it
+		kill(_attackerPid, SIGINT);
+
+		//Waiting for current attack to stop
+		cout << Text::textEffect(Text::BLINK, "Stopping attack on " + toString(true));
+		_getch();
+		wait(NULL);
+
+		//Clearing screen once finished
+		system(clearCommand.c_str());
+	}
+}
+
+bool Ipv4::setAttackerPid(const pid_t attackerPid)
+{
+	if(_attackerPid == 0)
+		_attackerPid = attackerPid;
+	else
+		return false;
 	
+	return true;
 }
 
 string Ipv4::getLabel() const
@@ -68,6 +94,11 @@ stringstream Ipv4::toSstream(bool label) const
 		_toSstream << "\t[" << _label << "]";
 	
 	return _toSstream;
+}
+
+pid_t Ipv4::getAttackerPid() const
+{
+	return _attackerPid;
 }
 
 vector<usi> Ipv4::readIp(const string &stringyIp)
